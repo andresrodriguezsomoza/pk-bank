@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Bank - Login</title>
+    
+    <!-- Bootstrap 4.0 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="css/login/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+                    <div class="login-card">
+                        <div class="text-center mb-4">
+                            <img src="img/pokeball.png" alt="Pokeball" class="pokeball-logo mb-3">
+                            <h2 class="pokemon-title">Pokémon Bank</h2>
+                            <p class="text-muted">Cajero Automático</p>
+                        </div>
+
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="username" class="pin-label">
+                                    <i class="fas fa-user mr-2"></i>Usuario
+                                </label>
+                                <input type="text" 
+                                       class="form-control form-control-lg" 
+                                       id="username" 
+                                       placeholder="Ingresa tu usuario"
+                                       required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pin" class="pin-label">
+                                    <i class="fas fa-lock mr-2"></i>PIN de 4 dígitos
+                                </label>
+                                <input type="password" 
+                                       class="form-control form-control-lg text-center pin-input" 
+                                       id="pin" 
+                                       maxlength="4" 
+                                       pattern="[0-9]{4}" 
+                                       inputmode="numeric"
+                                       placeholder="****"
+                                       required>
+                                <small class="form-text text-muted text-center mt-2">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Usa el PIN: 1234
+                                </small>
+                            </div>
+
+                            <button type="submit" class="btn btn-pokemon btn-block btn-lg">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Ingresar
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <p class="small text-muted mb-0">
+                                <i class="fas fa-shield-alt mr-1"></i>
+                                Banco Seguro
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const pin = document.getElementById('pin').value;
+            
+            if (!username.trim()) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campo vacío',
+                    text: 'Por favor ingresa tu usuario',
+                    confirmButtonColor: '#2A75BB',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+            
+            if (pin === '1234') {
+                // Mostrar alerta de éxito
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Bienvenido!',
+                    text: `Hola ${username}, ingresando al sistema...`,
+                    timer: 1500,
+                    showConfirmButton: false,
+                    background: '#fff',
+                    iconColor: '#2A75BB'
+                }).then(() => {
+                    // Guardar el usuario en sessionStorage
+                    sessionStorage.setItem('pokemonUser', username);
+                    window.location.href = 'dashboard.html';
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'PIN incorrecto',
+                    text: 'El PIN debe ser 1234',
+                    confirmButtonColor: '#FF0000',
+                    confirmButtonText: 'Intentar de nuevo'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

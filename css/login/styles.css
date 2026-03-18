@@ -1,0 +1,123 @@
+:root {
+    --pokemon-yellow: #FFCB05;
+    --pokemon-blue: #2A75BB;
+    --pokemon-dark-blue: #1A4F7A;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--pokemon-dark-blue) 0%, var(--pokemon-blue) 100%);
+    min-height: 100vh;
+}
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 30px 0;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    margin: 0 auto;
+}
+
+.pokeball-logo {
+    width: 60px;
+    height: 60px;
+}
+
+@media (min-width: 576px) {
+    .pokeball-logo {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media (min-width: 992px) {
+    .pokeball-logo {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+.pokemon-title {
+    color: var(--pokemon-dark-blue);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+}
+
+@media (min-width: 576px) {
+    .pokemon-title {
+        font-size: 1.8rem;
+    }
+}
+
+.pin-label {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+@media (min-width: 576px) {
+    .pin-label {
+        font-size: 1rem;
+    }
+}
+
+.pin-input {
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    border: 2px solid #e0e0e0;
+    height: 50px;
+}
+
+@media (min-width: 576px) {
+    .pin-input {
+        font-size: 2rem;
+        letter-spacing: 8px;
+        height: 60px;
+    }
+}
+
+.pin-input:focus {
+    border-color: var(--pokemon-yellow);
+    box-shadow: 0 0 0 0.2rem rgba(255, 203, 5, 0.25);
+}
+
+.btn-pokemon {
+    background: linear-gradient(45deg, var(--pokemon-yellow), #FFE873);
+    border: none;
+    color: var(--pokemon-dark-blue);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px;
+    font-size: 1rem;
+}
+
+@media (min-width: 576px) {
+    .btn-pokemon {
+        padding: 15px;
+        font-size: 1.1rem;
+    }
+}
+
+.btn-pokemon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 203, 5, 0.4);
+    color: var(--pokemon-dark-blue);
+}
+
+.form-text.small {
+    font-size: 0.8rem;
+}
