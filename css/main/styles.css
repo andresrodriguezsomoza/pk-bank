@@ -250,6 +250,29 @@ body {
     width: 100%;
 }
 
+.actions-placeholder .card{
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.actions-placeholder .card-header{
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.actions-placeholder .btn-link{
+    text-decoration: none;
+    color: var(--pokemon-dark-blue);
+    font-weight: 600;
+}
+
+.actions-placeholder .btn-link:hover{
+    text-decoration: none;
+    color: var(--pokemon-blue);
+}
+
 .action-panel {
     padding: 30px;
     min-height: 200px;
