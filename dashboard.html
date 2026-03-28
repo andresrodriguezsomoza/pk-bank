@@ -1,279 +1,582 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokémon Bank - Dashboard</title>
-    
+
     <!-- Bootstrap 4.0 CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
     <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <!-- Estilos del dashboard -->
-    <link rel="stylesheet" href="css/main/styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/main/styles.css" />
+  </head>
+  <body>
     <div class="wrapper">
-        <!-- Sidebar -->
-        <nav id="sidebar" class="active">
-            <div class="sidebar-header">
-                <img src="img/pokeball.png" alt="Pokeball" class="sidebar-logo">
-                <h3>Pokémon Bank</h3>
+      <!-- Sidebar -->
+      <nav id="sidebar" class="active">
+        <div class="sidebar-header">
+          <img src="img/pokeball.png" alt="Pokeball" class="sidebar-logo" />
+          <h3>Pokémon Bank</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+          <li class="active" id="menuInicio">
+            <a href="dashboard.html">
+              <i class="fas fa-home"></i>
+              <span>Inicio</span>
+            </a>
+          </li>
+          <li id="menuHistorial">
+            <a href="historial.html">
+              <i class="fas fa-history"></i>
+              <span>Historial</span>
+            </a>
+          </li>
+          <li id="menuGraficos">
+            <a href="graficos.html">
+              <i class="fas fa-chart-pie"></i>
+              <span>Gráficos</span>
+            </a>
+          </li>
+          <li class="logout-item">
+            <a href="#" id="logoutBtn">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Salir</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <div>
+              <p class="mb-0 font-weight-bold" id="userName">Ash Ketchum</p>
+              <small>#1234-5678-9012</small>
             </div>
+          </div>
+        </div>
+      </nav>
 
-            <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-home"></i>
-                        <span>Inicio</span>
-                    </a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-chart-line"></i>
-                                <span>Resumen</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-bell"></i>
-                                <span>Notificaciones</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="fas fa-eye"></i>
-                        <span>Consultar Saldo</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="fas fa-receipt"></i>
-                        <span>Pagar Servicios</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="fas fa-history"></i>
-                        <span>Historial</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="fas fa-chart-pie"></i>
-                        <span>Gráficos</span>
-                    </a>
-                </li>
-                <li class="logout-item">
-                    <a href="#" id="logoutBtn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Salir</span>
-                    </a>
-                </li>
-            </ul>
+      <!-- Page Content -->
+      <div id="content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <button
+              type="button"
+              id="sidebarCollapse"
+              class="btn btn-pokemon-menu"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
 
-            <div class="sidebar-footer">
-                <div class="user-info">
-                    <i class="fas fa-user-circle"></i>
-                    <div>
-                        <p class="mb-0 font-weight-bold" id="userName">Ash Ketchum</p>
-                        <small>#1234-5678-9012</small>
-                    </div>
+            <div class="navbar-right ml-auto">
+              <div class="dropdown">
+                <button
+                  class="btn btn-light dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                >
+                  <i class="fas fa-user mr-2"></i
+                  ><span id="navbarUserName">Ash Ketchum</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <div class="dropdown-divider"></div>
+                  <a
+                    class="dropdown-item text-danger"
+                    href="#"
+                    id="logoutDropdownBtn"
+                    ><i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión</a
+                  >
                 </div>
+              </div>
             </div>
+          </div>
         </nav>
 
-        <!-- Page Content -->
-        <div id="content">
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-pokemon-menu">
-                        <i class="fas fa-bars"></i>
-                    </button>
-
-                    <div class="navbar-right ml-auto">
-                        <div class="dropdown">
-                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                                <i class="fas fa-user mr-2"></i><span id="navbarUserName">Ash Ketchum</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" href="#" id="logoutDropdownBtn"><i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión</a>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Main Content -->
+        <div class="main-content">
+          <!-- Sección Dashboard Principal -->
+          <div id="dashboardSection">
+            <div class="row mb-4">
+              <div class="col-md-8">
+                <div class="welcome-card">
+                  <h2>¡Hola, <span id="welcomeUserName">Ash</span>! 👋</h2>
+                  <p class="text-muted">Bienvenido a tu banca digital</p>
                 </div>
-            </nav>
-
-            <!-- Contenido principal -->
-            <div class="main-content">
-                <!-- Saldo y bienvenida -->
-                <div class="row mb-4">
-                    <div class="col-md-8">
-                        <div class="welcome-card">
-                            <h2>¡Hola, <span id="welcomeUserName">Ash</span>! 👋</h2>
-                            <p class="text-muted">Bienvenido a tu banca digital</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="balance-card">
-                            <small>Saldo disponible</small>
-                            <h3>$5,678.90</h3>
-                            <small class="text-success"><i class="fas fa-arrow-up"></i> +2.5%</small>
-                        </div>
-                    </div>
+              </div>
+              <div class="col-md-4">
+                <div class="balance-card">
+                  <small>Saldo disponible</small>
+                  <h3 id="saldo">$5678.90</h3>
+                  <small class="text-success"
+                    ><i class="fas fa-arrow-up"></i> +2.5%</small
+                  >
                 </div>
-
-                <!-- Espacio para acciones rápidas -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="actions-placeholder">
-                            <h2 class="mb-3">Acciones Rapidas</h2>
-                            <div id="acordion">
-                                <div class="card">
-                                    <div class="card-header" id="headerDeposito">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link w-100 text-left" data-toggle="collapse" data-target="#collapseDeposit">
-                                             <i class="fas fa-arrow-down mr-2"></i> Deposito
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="collapseDeposit" class="collapse" data-parent="#acordion">
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label>Tipo de Deposito</label>
-                                                    <select class="form-control">
-                                                    <option>Cuenta Propia</option>
-                                                    <option>Cuenta de Tercero</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Institución Bancaria</label>
-                                                    <input type="text" class="form-control" placeholder="Ej: Pokemon Bank">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Monto</label>
-                                                    <input type="number" class="form-control" placeholder="$0.00">
-                                                </div>
-                                                <button type="button" class="btn btn-success btn-block">
-                                                    Confirmar Depósito
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-header" id="headerRetiro">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link w-100 text-left" data-toggle="collapse" data-target="#collapseRetiro">
-                                                <i class="fas fa-arrow-up mr-2"></i>Retiro
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="collapseRetiro" class="collapse" data-parent="#acordion">
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label>Tipo de Retiro</label>
-                                                    <select class="form-control">
-                                                        <option>Cajero</option>
-                                                        <option>Ventanilla</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Monto</label>
-                                                    <input type="number" class="form-control" placeholder="$0.00">
-                                                </div>
-                                                <button type="button" class="btn btn-danger btn-block">
-                                                    Confirmar Retiro
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--<p class="text-center text-muted my-5">
-                                <i class="fas fa-tools fa-3x mb-3"></i><br>
-                                Módulo de acciones en desarrollo<br>
-                                <small>(Depósito, Retiro, Consulta, Pagos)</small>
-                            </p>-->
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+
+            <div class="row mb-4">
+              <div class="col-12">
+                <div class="actions-placeholder">
+                  <h2 class="mb-3">Acciones Rápidas</h2>
+                  <div id="acordion">
+                    <div class="card">
+                      <div class="card-header" id="headerDeposito">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link w-100 text-left"
+                            data-toggle="collapse"
+                            data-target="#collapseDeposit"
+                          >
+                            <i class="fas fa-arrow-down mr-2"></i> Depósito
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="collapseDeposit"
+                        class="collapse"
+                        data-parent="#acordion"
+                      >
+                        <div class="card-body">
+                          <form>
+                            <div class="form-group">
+                              <label>Tipo de Depósito</label>
+                              <select class="form-control" id="tipoDeposito">
+                                <option>Cuenta Propia</option>
+                                <option>Cuenta de Tercero</option>
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <label>Institución Bancaria</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="institucionDeposito"
+                                placeholder="Ej: Pokemon Bank"
+                              />
+                            </div>
+                            <div class="form-group">
+                              <label>Monto</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="montoDeposito"
+                                placeholder="$0.00"
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              class="btn btn-success btn-block"
+                              onclick="hacerDeposito()"
+                            >
+                              Confirmar Depósito
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="card-header" id="headerRetiro">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link w-100 text-left collapsed"
+                            data-toggle="collapse"
+                            data-target="#collapseRetiro"
+                          >
+                            <i class="fas fa-arrow-up mr-2"></i> Retiro
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="collapseRetiro"
+                        class="collapse"
+                        data-parent="#acordion"
+                      >
+                        <div class="card-body">
+                          <form>
+                            <div class="form-group">
+                              <label>Tipo de Retiro</label>
+                              <select class="form-control" id="tipoRetiro">
+                                <option>Cajero</option>
+                                <option>Ventanilla</option>
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <label>Monto</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="montoRetiro"
+                                placeholder="$0.00"
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              class="btn btn-danger btn-block"
+                              onclick="hacerRetiro()"
+                            >
+                              Confirmar Retiro
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="card-header" id="headerPago">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link w-100 text-left collapsed"
+                            data-toggle="collapse"
+                            data-target="#collapsePago"
+                          >
+                            <i class="fas fa-file-invoice-dollar mr-2"></i> Pago
+                            de Servicios
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="collapsePago"
+                        class="collapse"
+                        data-parent="#acordion"
+                      >
+                        <div class="card-body">
+                          <form>
+                            <div class="form-group">
+                              <label>Tipo de Servicio</label>
+                              <select class="form-control" id="tipoServicio">
+                                <option>Agua</option>
+                                <option>Energía Eléctrica</option>
+                                <option>Internet / Telefonía</option>
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <label>NPE / Número de Referencia</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="referenciaPago"
+                                placeholder="Ej: 123456789"
+                              />
+                            </div>
+                            <div class="form-group">
+                              <label>Monto</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="montoPago"
+                                placeholder="$0.00"
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              class="btn btn-primary btn-block"
+                              onclick="hacerPago()"
+                            >
+                              Confirmar Pago
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección Historial (iframe) -->
+          <div id="historialSection" style="display: none">
+            <div class="iframe-container">
+              <iframe
+                id="historialIframe"
+                src="historial.html"
+                style="height: 500px"
+              ></iframe>
+            </div>
+          </div>
+
+          <!-- Sección Gráficos (iframe) -->
+          <div id="graficosSection" style="display: none">
+            <div class="iframe-container">
+              <iframe
+                id="graficosIframe"
+                src="graficos.html"
+                style="height: 450px"
+              ></iframe>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    
-    <script>
-        // Obtener el usuario guardado
-        const userName = sessionStorage.getItem('pokemonUser') || 'Ash Ketchum';
-        
-        // Mostrar el usuario en todos los lugares
-        document.getElementById('userName').textContent = userName;
-        document.getElementById('navbarUserName').textContent = userName;
-        
-        // Mostrar solo el primer nombre en el saludo
-        const firstName = userName.split(' ')[0];
-        document.getElementById('welcomeUserName').textContent = firstName;
 
-        // Toggle sidebar
-        document.getElementById('sidebarCollapse').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('active');
+    <script>
+      // Variables globales
+      let saldo = 5678.9;
+      let historial = [];
+
+      // Obtener el usuario guardado
+      const userName = sessionStorage.getItem("pokemonUser") || "Ash Ketchum";
+
+      // Mostrar el usuario en todos los lugares
+      document.getElementById("userName").textContent = userName;
+      document.getElementById("navbarUserName").textContent = userName;
+      const firstName = userName.split(" ")[0];
+      document.getElementById("welcomeUserName").textContent = firstName;
+
+      // Toggle sidebar
+      document
+        .getElementById("sidebarCollapse")
+        .addEventListener("click", function () {
+          document.getElementById("sidebar").classList.toggle("active");
         });
 
-        // Función para cerrar sesión con SweetAlert
-        function confirmLogout() {
-            Swal.fire({
-                title: '¿Cerrar sesión?',
-                text: '¿Estás seguro que deseas salir?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#2A75BB',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, salir',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    sessionStorage.clear();
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Hasta pronto!',
-                        text: 'Sesión cerrada correctamente',
-                        timer: 1500,
-                        showConfirmButton: false
-                    }).then(() => {
-                        window.location.href = 'index.html';
-                    });
-                }
-            });
+      // Cambiar entre secciones
+      window.showSection = function (section) {
+        document.getElementById("dashboardSection").style.display = "none";
+        document.getElementById("historialSection").style.display = "none";
+        document.getElementById("graficosSection").style.display = "none";
+
+        if (section === "dashboard") {
+          document.getElementById("dashboardSection").style.display = "block";
+        } else if (section === "historial") {
+          document.getElementById("historialSection").style.display = "block";
+          const iframe = document.getElementById("historialIframe");
+          if (iframe) {
+            iframe.src = iframe.src;
+          }
+        } else if (section === "graficos") {
+          document.getElementById("graficosSection").style.display = "block";
+          const iframe = document.getElementById("graficosIframe");
+          if (iframe) {
+            iframe.src = iframe.src;
+          }
+        }
+      };
+
+      // Cargar datos guardados
+      function cargarDatos() {
+        const saldoGuardado = localStorage.getItem("pokemonSaldo");
+        const historialGuardado = localStorage.getItem("pokemonHistorial");
+
+        if (saldoGuardado) saldo = parseFloat(saldoGuardado);
+        if (historialGuardado) historial = JSON.parse(historialGuardado);
+
+        actualizarSaldoPantalla();
+        notificarActualizacion();
+      }
+
+      function guardarDatos() {
+        localStorage.setItem("pokemonSaldo", saldo);
+        localStorage.setItem("pokemonHistorial", JSON.stringify(historial));
+        notificarActualizacion();
+      }
+
+      function actualizarSaldoPantalla() {
+        document.getElementById("saldo").innerText = "$" + saldo.toFixed(2);
+      }
+
+      function notificarActualizacion() {
+        const historialIframe = document.getElementById("historialIframe");
+        const graficosIframe = document.getElementById("graficosIframe");
+
+        if (historialIframe && historialIframe.contentWindow) {
+          historialIframe.contentWindow.postMessage(
+            {
+              type: "actualizar",
+              saldo: saldo,
+              historial: historial,
+            },
+            "*",
+          );
         }
 
-        // Botones de logout
-        document.getElementById('logoutBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            confirmLogout();
+        if (graficosIframe && graficosIframe.contentWindow) {
+          graficosIframe.contentWindow.postMessage(
+            {
+              type: "actualizar",
+              saldo: saldo,
+              historial: historial,
+            },
+            "*",
+          );
+        }
+      }
+
+      function registrarMovimiento(tipo, detalle, monto) {
+        const fecha = new Date().toLocaleString("es-ES", {
+          dateStyle: "short",
+          timeStyle: "short",
+        });
+        historial.unshift({ fecha, tipo, detalle, monto });
+        guardarDatos();
+      }
+
+      // Lógica de Depósito
+      window.hacerDeposito = function () {
+        let inputMonto = document.getElementById("montoDeposito");
+        let monto = parseFloat(inputMonto.value);
+        let tipo = document.getElementById("tipoDeposito").value;
+        let institucion =
+          document.getElementById("institucionDeposito").value ||
+          "Pokémon Bank";
+
+        if (monto > 0) {
+          saldo += monto;
+          registrarMovimiento("Depósito", `${tipo} - ${institucion}`, monto);
+          actualizarSaldoPantalla();
+          inputMonto.value = "";
+          Swal.fire(
+            "¡Depósito Exitoso!",
+            "El dinero ha sido abonado a tu cuenta.",
+            "success",
+          );
+        } else {
+          Swal.fire(
+            "Monto inválido",
+            "Por favor ingresa una cantidad mayor a 0.",
+            "warning",
+          );
+        }
+      };
+
+      // Lógica de Retiro
+      window.hacerRetiro = function () {
+        let inputMonto = document.getElementById("montoRetiro");
+        let monto = parseFloat(inputMonto.value);
+        let tipo = document.getElementById("tipoRetiro").value;
+
+        if (monto > 0 && monto <= saldo) {
+          saldo -= monto;
+          registrarMovimiento("Retiro", `${tipo} - Retiro en efectivo`, monto);
+          actualizarSaldoPantalla();
+          inputMonto.value = "";
+          Swal.fire(
+            "¡Retiro Exitoso!",
+            "Por favor toma tu efectivo.",
+            "success",
+          );
+        } else if (monto > saldo) {
+          Swal.fire(
+            "Fondos Insuficientes",
+            "No tienes suficiente saldo para este retiro.",
+            "error",
+          );
+        } else {
+          Swal.fire(
+            "Monto inválido",
+            "Por favor ingresa una cantidad mayor a 0.",
+            "warning",
+          );
+        }
+      };
+
+      // Lógica de Pago de Servicios
+      window.hacerPago = function () {
+        let inputMonto = document.getElementById("montoPago");
+        let selectorServicio = document.getElementById("tipoServicio");
+        let referencia = document.getElementById("referenciaPago").value;
+        let monto = parseFloat(inputMonto.value);
+        let servicio = selectorServicio.value;
+
+        if (monto > 0 && monto <= saldo) {
+          saldo -= monto;
+          registrarMovimiento(
+            "Pago",
+            `${servicio} - Ref: ${referencia || "N/A"}`,
+            monto,
+          );
+          actualizarSaldoPantalla();
+          inputMonto.value = "";
+          document.getElementById("referenciaPago").value = "";
+          Swal.fire(
+            "¡Pago Exitoso!",
+            `El pago de ${servicio} se realizó correctamente.`,
+            "success",
+          );
+        } else if (monto > saldo) {
+          Swal.fire(
+            "Fondos Insuficientes",
+            "No tienes saldo suficiente para pagar este servicio.",
+            "error",
+          );
+        } else {
+          Swal.fire(
+            "Monto inválido",
+            "Por favor ingresa una cantidad mayor a 0.",
+            "warning",
+          );
+        }
+      };
+
+      // Función para cerrar sesión
+      function confirmLogout() {
+        Swal.fire({
+          title: "¿Cerrar sesión?",
+          text: "¿Estás seguro que deseas salir?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#2A75BB",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí, salir",
+          cancelButtonText: "Cancelar",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            sessionStorage.clear();
+            Swal.fire({
+              icon: "success",
+              title: "¡Hasta pronto!",
+              text: "Sesión cerrada correctamente",
+              timer: 1500,
+              showConfirmButton: false,
+            }).then(() => {
+              window.location.href = "index.html";
+            });
+          }
+        });
+      }
+
+      // Botones de logout
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          confirmLogout();
         });
 
-        document.getElementById('logoutDropdownBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            confirmLogout();
+      document
+        .getElementById("logoutDropdownBtn")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          confirmLogout();
         });
+
+      // Inicializar
+      cargarDatos();
     </script>
-</body>
+  </body>
 </html>

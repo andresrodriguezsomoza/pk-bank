@@ -24,7 +24,6 @@ body {
     min-height: 100vh;
 }
 
-/* Sidebar */
 #sidebar {
     min-width: var(--sidebar-width);
     max-width: var(--sidebar-width);
@@ -39,7 +38,6 @@ body {
     max-width: var(--sidebar-collapsed-width);
 }
 
-/* Header */
 #sidebar .sidebar-header {
     padding: 20px;
     display: flex;
@@ -61,7 +59,6 @@ body {
     font-weight: 600;
 }
 
-/* Menú */
 #sidebar ul.components {
     padding: 10px 0;
     list-style: none;
@@ -77,6 +74,7 @@ body {
     transition: all 0.2s;
     font-size: 0.95rem;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 #sidebar ul li a:hover {
@@ -100,7 +98,6 @@ body {
     flex: 1;
 }
 
-/* Submenú */
 #sidebar ul ul {
     background: rgba(0,0,0,0.1);
 }
@@ -109,7 +106,6 @@ body {
     padding-left: 52px;
 }
 
-/* ===== SIDEBAR COLAPSADA ===== */
 #sidebar.active .sidebar-header h3,
 #sidebar.active .components li a span,
 #sidebar.active .user-info div,
@@ -145,7 +141,6 @@ body {
     margin-top: 10px;
 }
 
-/* Footer */
 .sidebar-footer {
     position: absolute;
     bottom: 0;
@@ -180,7 +175,6 @@ body {
     margin: 0;
 }
 
-/* Contenido principal */
 #content {
     width: 100%;
     min-height: 100vh;
@@ -205,13 +199,13 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: transform 0.2s;
 }
 
 .btn-pokemon-menu:hover {
     transform: scale(1.05);
 }
 
-/* Resto del contenido (igual que antes) */
 .main-content {
     padding: 30px;
 }
@@ -226,6 +220,10 @@ body {
 .welcome-card h2 {
     margin: 0;
     font-size: 1.8rem;
+}
+
+.welcome-card .text-muted {
+    color: rgba(255,255,255,0.8) !important;
 }
 
 .balance-card {
@@ -248,27 +246,28 @@ body {
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     width: 100%;
+    padding: 20px;
 }
 
-.actions-placeholder .card{
+.actions-placeholder .card {
     border: none;
     border-radius: 10px;
     margin-bottom: 10px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
 }
 
-.actions-placeholder .card-header{
+.actions-placeholder .card-header {
     background: #f8f9fa;
     border-radius: 10px;
 }
 
-.actions-placeholder .btn-link{
+.actions-placeholder .btn-link {
     text-decoration: none;
     color: var(--pokemon-dark-blue);
     font-weight: 600;
 }
 
-.actions-placeholder .btn-link:hover{
+.actions-placeholder .btn-link:hover {
     text-decoration: none;
     color: var(--pokemon-blue);
 }
@@ -276,6 +275,175 @@ body {
 .action-panel {
     padding: 30px;
     min-height: 200px;
+}
+
+.iframe-container {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+
+.iframe-container iframe {
+    width: 100%;
+    border: none;
+    display: block;
+}
+
+.nav-tabs .nav-link {
+    color: var(--pokemon-dark-blue);
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: var(--pokemon-yellow);
+    border-color: var(--pokemon-yellow);
+    color: var(--pokemon-dark-blue);
+}
+
+.historial-container {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.historial-container .card-header {
+    background: white;
+    border-bottom: 1px solid #eee;
+    padding: 20px;
+}
+
+.historial-container .table {
+    margin: 0;
+}
+
+.historial-container .table th {
+    background: #f8f9fa;
+    border-top: none;
+    font-weight: 600;
+}
+
+.badge-deposito {
+    background: #d4edda;
+    color: #155724;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-block;
+}
+
+.badge-retiro {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-block;
+}
+
+.badge-pago {
+    background: #fff3cd;
+    color: #856404;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-block;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-primary {
+    color: #007bff !important;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.graficos-container {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.stats-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.stats-card h3 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.stats-card small {
+    opacity: 0.9;
+}
+
+.stats-card-depositos {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.stats-card-retiros {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stats-card-saldo {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.stats-card-transacciones {
+    background: linear-gradient(135deg, #4568DC 0%, #B06AB3 100%);
+}
+
+canvas {
+    max-height: 350px;
+    width: 100%;
+}
+
+.badge-success {
+    background: #d4edda;
+    color: #155724;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.badge-danger {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.badge-warning {
+    background: #fff3cd;
+    color: #856404;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
 }
 
 .transactions-card {
@@ -299,9 +467,14 @@ body {
     background: #f8f9fa;
 }
 
-.badge-success { background: #d4edda; color: #155724; }
-.badge-danger { background: #f8d7da; color: #721c24; }
-.badge-warning { background: #fff3cd; color: #856404; }
+.stats-card-pagos {
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+}
 
 @media (max-width: 768px) {
     #sidebar {
@@ -317,5 +490,29 @@ body {
     
     .main-content {
         padding: 20px 15px;
+    }
+    
+    .welcome-card h2 {
+        font-size: 1.3rem;
+    }
+    
+    .balance-card h3 {
+        font-size: 1.5rem;
+    }
+    
+    .stats-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .servicio-card {
+        margin-bottom: 15px;
+    }
+    
+    .servicio-card i {
+        font-size: 2rem;
+    }
+    
+    .servicio-card h4 {
+        font-size: 1rem;
     }
 }
