@@ -339,6 +339,12 @@
       let saldo = 5678.9;
       let historial = [];
 
+      const pokemonUser = sessionStorage.getItem("pokemonUser");
+      if (!pokemonUser) {
+        // Si no hay sesión, redirigir al login
+        window.location.href = "index.html";
+      }
+
       // Obtener el usuario guardado
       const userName = sessionStorage.getItem("pokemonUser") || "Ash Ketchum";
 

@@ -1,138 +1,169 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokémon Bank - Gráficos</title>
-    
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="css/main/styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/main/styles.css" />
+  </head>
+  <body>
     <div class="wrapper">
-        <!-- Sidebar -->
-        <nav id="sidebar" class="active">
-            <div class="sidebar-header">
-                <img src="img/pokeball.png" alt="Pokeball" class="sidebar-logo" />
-                <h3>Pokémon Bank</h3>
+      <!-- Sidebar -->
+      <nav id="sidebar" class="active">
+        <div class="sidebar-header">
+          <img src="img/pokeball.png" alt="Pokeball" class="sidebar-logo" />
+          <h3>Pokémon Bank</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+          <li id="menuInicio">
+            <a href="dashboard.html">
+              <i class="fas fa-home"></i>
+              <span>Inicio</span>
+            </a>
+          </li>
+          <li id="menuHistorial">
+            <a href="historial.html">
+              <i class="fas fa-history"></i>
+              <span>Historial</span>
+            </a>
+          </li>
+          <li class="active" id="menuGraficos">
+            <a href="graficos.html">
+              <i class="fas fa-chart-pie"></i>
+              <span>Gráficos</span>
+            </a>
+          </li>
+          <li class="logout-item">
+            <a href="#" id="logoutBtn">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Salir</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <div>
+              <p class="mb-0 font-weight-bold" id="userName">Ash Ketchum</p>
+              <small>#1234-5678-9012</small>
             </div>
+          </div>
+        </div>
+      </nav>
 
-            <ul class="list-unstyled components">
-                <li id="menuInicio">
-                    <a href="dashboard.html">
-                        <i class="fas fa-home"></i>
-                        <span>Inicio</span>
-                    </a>
-                </li>
-                <li id="menuHistorial">
-                    <a href="historial.html">
-                        <i class="fas fa-history"></i>
-                        <span>Historial</span>
-                    </a>
-                </li>
-                <li class="active" id="menuGraficos">
-                    <a href="graficos.html">
-                        <i class="fas fa-chart-pie"></i>
-                        <span>Gráficos</span>
-                    </a>
-                </li>
-                <li class="logout-item">
-                    <a href="#" id="logoutBtn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Salir</span>
-                    </a>
-                </li>
-            </ul>
+      <!-- Page Content -->
+      <div id="content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <button
+              type="button"
+              id="sidebarCollapse"
+              class="btn btn-pokemon-menu"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
 
-            <div class="sidebar-footer">
-                <div class="user-info">
-                    <i class="fas fa-user-circle"></i>
-                    <div>
-                        <p class="mb-0 font-weight-bold" id="userName">Ash Ketchum</p>
-                        <small>#1234-5678-9012</small>
-                    </div>
+            <div class="navbar-right ml-auto">
+              <div class="dropdown">
+                <button
+                  class="btn btn-light dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                >
+                  <i class="fas fa-user mr-2"></i
+                  ><span id="navbarUserName">Ash Ketchum</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <div class="dropdown-divider"></div>
+                  <a
+                    class="dropdown-item text-danger"
+                    href="#"
+                    id="logoutDropdownBtn"
+                    ><i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión</a
+                  >
                 </div>
+              </div>
             </div>
+          </div>
         </nav>
 
-        <!-- Page Content -->
-        <div id="content">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-pokemon-menu">
-                        <i class="fas fa-bars"></i>
-                    </button>
-
-                    <div class="navbar-right ml-auto">
-                        <div class="dropdown">
-                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                                <i class="fas fa-user mr-2"></i><span id="navbarUserName">Ash Ketchum</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" href="#" id="logoutDropdownBtn"><i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión</a>
-                            </div>
-                        </div>
-                    </div>
+        <div class="main-content">
+          <div class="graficos-container">
+            <!-- Tarjetas de totales -->
+            <div class="row mb-4">
+              <div class="col-md-4">
+                <div class="stats-card stats-card-depositos">
+                  <small
+                    ><i class="fas fa-chart-line"></i> Total Depósitos</small
+                  >
+                  <h3 id="totalDepositos">$0.00</h3>
                 </div>
-            </nav>
-
-            <div class="main-content">
-                <div class="graficos-container">
-                    <!-- Tarjetas de totales -->
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <div class="stats-card stats-card-depositos">
-                                <small><i class="fas fa-chart-line"></i> Total Depósitos</small>
-                                <h3 id="totalDepositos">$0.00</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="stats-card stats-card-retiros">
-                                <small><i class="fas fa-chart-line"></i> Total Retiros</small>
-                                <h3 id="totalRetiros">$0.00</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="stats-card stats-card-pagos">
-                                <small><i class="fas fa-file-invoice-dollar"></i> Total Pagos</small>
-                                <h3 id="totalPagos">$0.00</h3>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Gráfico de barras -->
-                    <div class="row">
-                        <div class="col-12">
-                            <h5 class="text-center mb-3">
-                                <i class="fas fa-chart-bar mr-2"></i>Resumen de Movimientos
-                            </h5>
-                            <canvas id="graficoMovimientos"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Saldo y total transacciones -->
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <div class="stats-card stats-card-saldo">
-                                <small><i class="fas fa-wallet"></i> Saldo Actual</small>
-                                <h3 id="saldoActual">$0.00</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="stats-card stats-card-transacciones">
-                                <small><i class="fas fa-chart-pie"></i> Total Transacciones</small>
-                                <h3 id="totalTransacciones">0</h3>
-                            </div>
-                        </div>
-                    </div>
+              </div>
+              <div class="col-md-4">
+                <div class="stats-card stats-card-retiros">
+                  <small><i class="fas fa-chart-line"></i> Total Retiros</small>
+                  <h3 id="totalRetiros">$0.00</h3>
                 </div>
+              </div>
+              <div class="col-md-4">
+                <div class="stats-card stats-card-pagos">
+                  <small
+                    ><i class="fas fa-file-invoice-dollar"></i> Total
+                    Pagos</small
+                  >
+                  <h3 id="totalPagos">$0.00</h3>
+                </div>
+              </div>
             </div>
+
+            <!-- Gráfico de barras -->
+            <div class="row">
+              <div class="col-12">
+                <h5 class="text-center mb-3">
+                  <i class="fas fa-chart-bar mr-2"></i>Resumen de Movimientos
+                </h5>
+                <canvas id="graficoMovimientos"></canvas>
+              </div>
+            </div>
+
+            <!-- Saldo y total transacciones -->
+            <div class="row mt-4">
+              <div class="col-md-6">
+                <div class="stats-card stats-card-saldo">
+                  <small><i class="fas fa-wallet"></i> Saldo Actual</small>
+                  <h3 id="saldoActual">$0.00</h3>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="stats-card stats-card-transacciones">
+                  <small
+                    ><i class="fas fa-chart-pie"></i> Total Transacciones</small
+                  >
+                  <h3 id="totalTransacciones">0</h3>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
@@ -140,140 +171,175 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <script>
-        let grafico;
-        let saldo = 0;
+      let grafico;
+      let saldo = 0;
 
-        // Usuario
-        const userName = sessionStorage.getItem('pokemonUser') || 'Ash Ketchum';
-        document.getElementById('userName').textContent = userName;
-        document.getElementById('navbarUserName').textContent = userName;
+      // Usuario
+      const userName = sessionStorage.getItem("pokemonUser") || "Ash Ketchum";
+      document.getElementById("userName").textContent = userName;
+      document.getElementById("navbarUserName").textContent = userName;
 
-        function calcularTotales(historial) {
-            let totalDepositos = 0;
-            let totalRetiros = 0;
-            let totalPagos = 0;
-            
-            historial.forEach(mov => {
-                if (mov.tipo === 'Depósito') {
-                    totalDepositos += mov.monto;
-                } else if (mov.tipo === 'Retiro') {
-                    totalRetiros += mov.monto;
-                } else if (mov.tipo === 'Pago') {
-                    totalPagos += mov.monto;
-                }
-            });
-            
-            return { totalDepositos, totalRetiros, totalPagos };
+      const pokemonUser = sessionStorage.getItem("pokemonUser");
+      if (!pokemonUser) {
+        // Si no hay sesión, redirigir al login
+        window.location.href = "index.html";
+      }
+
+      function calcularTotales(historial) {
+        let totalDepositos = 0;
+        let totalRetiros = 0;
+        let totalPagos = 0;
+
+        historial.forEach((mov) => {
+          if (mov.tipo === "Depósito") {
+            totalDepositos += mov.monto;
+          } else if (mov.tipo === "Retiro") {
+            totalRetiros += mov.monto;
+          } else if (mov.tipo === "Pago") {
+            totalPagos += mov.monto;
+          }
+        });
+
+        return { totalDepositos, totalRetiros, totalPagos };
+      }
+
+      function actualizarTodo() {
+        const historial =
+          JSON.parse(localStorage.getItem("pokemonHistorial")) || [];
+        saldo = parseFloat(localStorage.getItem("pokemonSaldo")) || 5678.9;
+
+        const { totalDepositos, totalRetiros, totalPagos } =
+          calcularTotales(historial);
+
+        // Actualizar tarjetas de totales
+        document.getElementById("totalDepositos").innerText =
+          "$" + totalDepositos.toFixed(2);
+        document.getElementById("totalRetiros").innerText =
+          "$" + totalRetiros.toFixed(2);
+        document.getElementById("totalPagos").innerText =
+          "$" + totalPagos.toFixed(2);
+        document.getElementById("saldoActual").innerText =
+          "$" + saldo.toFixed(2);
+        document.getElementById("totalTransacciones").innerText =
+          historial.length;
+
+        // Actualizar gráfico
+        if (grafico) {
+          grafico.data.datasets[0].data = [
+            totalDepositos,
+            totalRetiros,
+            totalPagos,
+          ];
+          grafico.update();
         }
+      }
 
-        function actualizarTodo() {
-            const historial = JSON.parse(localStorage.getItem('pokemonHistorial')) || [];
-            saldo = parseFloat(localStorage.getItem('pokemonSaldo')) || 5678.90;
-            
-            const { totalDepositos, totalRetiros, totalPagos } = calcularTotales(historial);
-            
-            // Actualizar tarjetas de totales
-            document.getElementById('totalDepositos').innerText = '$' + totalDepositos.toFixed(2);
-            document.getElementById('totalRetiros').innerText = '$' + totalRetiros.toFixed(2);
-            document.getElementById('totalPagos').innerText = '$' + totalPagos.toFixed(2);
-            document.getElementById('saldoActual').innerText = '$' + saldo.toFixed(2);
-            document.getElementById('totalTransacciones').innerText = historial.length;
-            
-            // Actualizar gráfico
-            if (grafico) {
-                grafico.data.datasets[0].data = [totalDepositos, totalRetiros, totalPagos];
-                grafico.update();
-            }
-        }
+      function initGrafico() {
+        const ctx = document
+          .getElementById("graficoMovimientos")
+          .getContext("2d");
 
-        function initGrafico() {
-            const ctx = document.getElementById('graficoMovimientos').getContext('2d');
-            
-            grafico = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Depósitos', 'Retiros', 'Pagos'],
-                    datasets: [{
-                        label: 'Movimientos ($)',
-                        data: [0, 0, 0],
-                        backgroundColor: [
-                            'rgba(40, 167, 69, 0.8)',
-                            'rgba(220, 53, 69, 0.8)',
-                            'rgba(0, 123, 255, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(40, 167, 69, 1)',
-                            'rgba(220, 53, 69, 1)',
-                            'rgba(0, 123, 255, 1)'
-                        ],
-                        borderWidth: 2
-                    }]
+        grafico = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: ["Depósitos", "Retiros", "Pagos"],
+            datasets: [
+              {
+                label: "Movimientos ($)",
+                data: [0, 0, 0],
+                backgroundColor: [
+                  "rgba(40, 167, 69, 0.8)",
+                  "rgba(220, 53, 69, 0.8)",
+                  "rgba(0, 123, 255, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(40, 167, 69, 1)",
+                  "rgba(220, 53, 69, 1)",
+                  "rgba(0, 123, 255, 1)",
+                ],
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { position: "top" },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return "$" + context.raw.toFixed(2);
+                  },
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: { position: 'top' },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return '$' + context.raw.toFixed(2);
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function (value) {
+                    return "$" + value;
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
 
-        // Sidebar toggle
-        document.getElementById('sidebarCollapse').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('active');
+      // Sidebar toggle
+      document
+        .getElementById("sidebarCollapse")
+        .addEventListener("click", function () {
+          document.getElementById("sidebar").classList.toggle("active");
         });
 
-        // Logout
-        function confirmLogout() {
+      // Logout
+      function confirmLogout() {
+        Swal.fire({
+          title: "¿Cerrar sesión?",
+          text: "¿Estás seguro?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#2A75BB",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí, salir",
+          cancelButtonText: "Cancelar",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            sessionStorage.clear();
             Swal.fire({
-                title: '¿Cerrar sesión?',
-                text: '¿Estás seguro?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#2A75BB',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, salir',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    sessionStorage.clear();
-                    Swal.fire({ icon: 'success', title: '¡Hasta pronto!', timer: 1500, showConfirmButton: false })
-                        .then(() => window.location.href = 'index.html');
-                }
-            });
-        }
-
-        document.getElementById('logoutBtn').addEventListener('click', (e) => { e.preventDefault(); confirmLogout(); });
-        document.getElementById('logoutDropdownBtn').addEventListener('click', (e) => { e.preventDefault(); confirmLogout(); });
-
-        // Inicializar
-        initGrafico();
-        actualizarTodo();
-        
-        // Escuchar cambios en localStorage
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'pokemonHistorial' || e.key === 'pokemonSaldo') {
-                actualizarTodo();
-            }
+              icon: "success",
+              title: "¡Hasta pronto!",
+              timer: 1500,
+              showConfirmButton: false,
+            }).then(() => (window.location.href = "index.html"));
+          }
         });
+      }
+
+      document.getElementById("logoutBtn").addEventListener("click", (e) => {
+        e.preventDefault();
+        confirmLogout();
+      });
+      document
+        .getElementById("logoutDropdownBtn")
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          confirmLogout();
+        });
+
+      // Inicializar
+      initGrafico();
+      actualizarTodo();
+
+      // Escuchar cambios en localStorage
+      window.addEventListener("storage", function (e) {
+        if (e.key === "pokemonHistorial" || e.key === "pokemonSaldo") {
+          actualizarTodo();
+        }
+      });
     </script>
-</body>
+  </body>
 </html>
