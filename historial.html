@@ -22,7 +22,6 @@
   </head>
   <body>
     <div class="wrapper">
-      <!-- Sidebar -->
       <nav id="sidebar" class="active">
         <div class="sidebar-header">
           <img src="img/pokeball.png" alt="Pokeball" class="sidebar-logo" />
@@ -61,43 +60,27 @@
             <i class="fas fa-user-circle"></i>
             <div>
               <p class="mb-0 font-weight-bold" id="userName">Ash Ketchum</p>
-              <small>#1234-5678-9012</small>
+              <small id="userAccount">0987654321</small>
             </div>
           </div>
         </div>
       </nav>
 
-      <!-- Page Content -->
       <div id="content">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <div class="container-fluid">
-            <button
-              type="button"
-              id="sidebarCollapse"
-              class="btn btn-pokemon-menu"
-            >
+            <button type="button" id="sidebarCollapse" class="btn btn-pokemon-menu">
               <i class="fas fa-bars"></i>
             </button>
-
             <div class="navbar-right ml-auto">
               <div class="dropdown">
-                <button
-                  class="btn btn-light dropdown-toggle"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                >
-                  <i class="fas fa-user mr-2"></i
-                  ><span id="navbarUserName">Ash Ketchum</span>
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                  <i class="fas fa-user mr-2"></i><span id="navbarUserName">Ash Ketchum</span>
+                  <small class="text-muted ml-2" id="navbarAccount">(0987654321)</small>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                   <div class="dropdown-divider"></div>
-                  <a
-                    class="dropdown-item text-danger"
-                    href="#"
-                    id="logoutDropdownBtn"
-                    ><i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión</a
-                  >
+                  <a class="dropdown-item text-danger" href="#" id="logoutDropdownBtn"><i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión</a>
                 </div>
               </div>
             </div>
@@ -107,9 +90,7 @@
         <div class="main-content">
           <div class="historial-container">
             <div class="card-header bg-white border-bottom">
-              <h5 class="mb-0">
-                <i class="fas fa-history mr-2"></i>Historial de Transacciones
-              </h5>
+              <h5 class="mb-0"><i class="fas fa-history mr-2"></i>Historial de Transacciones - Cuenta: <span id="headerAccount">0987654321</span></h5>
             </div>
             <div class="table-responsive">
               <table class="table table-hover mb-0">
@@ -141,14 +122,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <script>
-      // Usuario
       const userName = sessionStorage.getItem("pokemonUser") || "Ash Ketchum";
+      const userAccount = sessionStorage.getItem("pokemonAccount") || "0987654321";
+      
       document.getElementById("userName").textContent = userName;
+      document.getElementById("userAccount").textContent = userAccount;
       document.getElementById("navbarUserName").textContent = userName;
+      document.getElementById("navbarAccount").textContent = `(${userAccount})`;
+      document.getElementById("headerAccount").textContent = userAccount;
 
       const pokemonUser = sessionStorage.getItem("pokemonUser");
       if (!pokemonUser) {
-        // Si no hay sesión, redirigir al login
         window.location.href = "index.html";
       }
 
@@ -169,37 +153,31 @@
       }
 
       function cargarHistorial() {
-        const historial =
-          JSON.parse(localStorage.getItem("pokemonHistorial")) || [];
+        const historial = JSON.parse(localStorage.getItem("pokemonHistorial")) || [];
         const tbody = document.getElementById("tablaHistorial");
         tbody.innerHTML = "";
 
         if (historial.length === 0) {
-          tbody.innerHTML =
-            '<tr><td colspan="4" class="text-center text-muted py-4"><i class="fas fa-inbox fa-2x mb-2 d-block"></i>Aún no hay movimientos</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4"><i class="fas fa-inbox fa-2x mb-2 d-block"></i>Aún no hay movimientos</td>' + '<\/tr>';
           return;
         }
 
         historial.forEach((mov) => {
           tbody.innerHTML += `
-                    <tr>
-                        <td class="align-middle">${mov.fecha}</td>
-                        <td class="align-middle"><span class="${getBadgeClass(mov.tipo)}">${mov.tipo}</span></td>
-                        <td class="align-middle">${mov.detalle}</td>
-                        <td class="align-middle ${getColorMonto(mov.tipo)} font-weight-bold">${getSigno(mov.tipo)}$${mov.monto.toFixed(2)}</td>
-                    </tr>
-                `;
+            <tr>
+              <td class="align-middle">${mov.fecha}</td>
+              <td class="align-middle"><span class="${getBadgeClass(mov.tipo)}">${mov.tipo}</span></td>
+              <td class="align-middle">${mov.detalle}</td>
+              <td class="align-middle ${getColorMonto(mov.tipo)} font-weight-bold">${getSigno(mov.tipo)}$${mov.monto.toFixed(2)}</td>
+            </tr>
+          `;
         });
       }
 
-      // Sidebar toggle
-      document
-        .getElementById("sidebarCollapse")
-        .addEventListener("click", function () {
-          document.getElementById("sidebar").classList.toggle("active");
-        });
+      document.getElementById("sidebarCollapse").addEventListener("click", function () {
+        document.getElementById("sidebar").classList.toggle("active");
+      });
 
-      // Logout
       function confirmLogout() {
         Swal.fire({
           title: "¿Cerrar sesión?",
@@ -213,29 +191,21 @@
         }).then((result) => {
           if (result.isConfirmed) {
             sessionStorage.clear();
-            Swal.fire({
-              icon: "success",
-              title: "¡Hasta pronto!",
-              timer: 1500,
-              showConfirmButton: false,
-            }).then(() => (window.location.href = "index.html"));
+            Swal.fire({ icon: "success", title: "¡Hasta pronto!", timer: 1500, showConfirmButton: false }).then(() => (window.location.href = "index.html"));
           }
         });
       }
 
-      document.getElementById("logoutBtn").addEventListener("click", (e) => {
-        e.preventDefault();
-        confirmLogout();
-      });
-      document
-        .getElementById("logoutDropdownBtn")
-        .addEventListener("click", (e) => {
-          e.preventDefault();
-          confirmLogout();
-        });
+      document.getElementById("logoutBtn").addEventListener("click", (e) => { e.preventDefault(); confirmLogout(); });
+      document.getElementById("logoutDropdownBtn").addEventListener("click", (e) => { e.preventDefault(); confirmLogout(); });
 
-      // Inicializar
       cargarHistorial();
+
+      window.addEventListener("storage", function (e) {
+        if (e.key === "pokemonHistorial") {
+          cargarHistorial();
+        }
+      });
     </script>
   </body>
 </html>

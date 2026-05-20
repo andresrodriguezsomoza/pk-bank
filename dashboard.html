@@ -24,6 +24,12 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- ValidateJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <!-- Estilos del dashboard -->
     <link rel="stylesheet" href="css/main/styles.css" />
   </head>
@@ -68,7 +74,7 @@
             <i class="fas fa-user-circle"></i>
             <div>
               <p class="mb-0 font-weight-bold" id="userName">Ash Ketchum</p>
-              <small>#1234-5678-9012</small>
+              <small id="userAccount">0987654321</small>
             </div>
           </div>
         </div>
@@ -97,6 +103,7 @@
                 >
                   <i class="fas fa-user mr-2"></i
                   ><span id="navbarUserName">Ash Ketchum</span>
+                  <small class="text-muted ml-2" id="navbarAccount">(0987654321)</small>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                   <div class="dropdown-divider"></div>
@@ -120,15 +127,15 @@
               <div class="col-md-8">
                 <div class="welcome-card">
                   <h2>¡Hola, <span id="welcomeUserName">Ash</span>! 👋</h2>
-                  <p class="text-muted">Bienvenido a tu banca digital</p>
+                  <p class="text-muted">Cuenta: <strong id="welcomeAccount">0987654321</strong></p>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="balance-card">
                   <small>Saldo disponible</small>
-                  <h3 id="saldo">$5678.90</h3>
+                  <h3 id="saldo">$500.00</h3>
                   <small class="text-success"
-                    ><i class="fas fa-arrow-up"></i> +2.5%</small
+                    ><i class="fas fa-arrow-up"></i> Actualizado</small
                   >
                 </div>
               </div>
@@ -157,7 +164,7 @@
                         data-parent="#acordion"
                       >
                         <div class="card-body">
-                          <form>
+                          <form id="formDeposito">
                             <div class="form-group">
                               <label>Tipo de Depósito</label>
                               <select class="form-control" id="tipoDeposito">
@@ -175,12 +182,13 @@
                               />
                             </div>
                             <div class="form-group">
-                              <label>Monto</label>
+                              <label>Monto (Máx. $10,000)</label>
                               <input
                                 type="number"
                                 class="form-control"
                                 id="montoDeposito"
                                 placeholder="$0.00"
+                                step="0.01"
                               />
                             </div>
                             <button
@@ -213,7 +221,7 @@
                         data-parent="#acordion"
                       >
                         <div class="card-body">
-                          <form>
+                          <form id="formRetiro">
                             <div class="form-group">
                               <label>Tipo de Retiro</label>
                               <select class="form-control" id="tipoRetiro">
@@ -222,12 +230,13 @@
                               </select>
                             </div>
                             <div class="form-group">
-                              <label>Monto</label>
+                              <label>Monto (Máx. $10,000)</label>
                               <input
                                 type="number"
                                 class="form-control"
                                 id="montoRetiro"
                                 placeholder="$0.00"
+                                step="0.01"
                               />
                             </div>
                             <button
@@ -261,7 +270,7 @@
                         data-parent="#acordion"
                       >
                         <div class="card-body">
-                          <form>
+                          <form id="formPago">
                             <div class="form-group">
                               <label>Tipo de Servicio</label>
                               <select class="form-control" id="tipoServicio">
@@ -280,12 +289,13 @@
                               />
                             </div>
                             <div class="form-group">
-                              <label>Monto</label>
+                              <label>Monto (Máx. $10,000)</label>
                               <input
                                 type="number"
                                 class="form-control"
                                 id="montoPago"
                                 placeholder="$0.00"
+                                step="0.01"
                               />
                             </div>
                             <button
@@ -336,32 +346,91 @@
 
     <script>
       // Variables globales
-      let saldo = 5678.9;
+      let saldo = 500.00;
       let historial = [];
+      const MONTO_MAXIMO = 10000;
 
       const pokemonUser = sessionStorage.getItem("pokemonUser");
       if (!pokemonUser) {
-        // Si no hay sesión, redirigir al login
         window.location.href = "index.html";
       }
 
-      // Obtener el usuario guardado
       const userName = sessionStorage.getItem("pokemonUser") || "Ash Ketchum";
+      const userAccount = sessionStorage.getItem("pokemonAccount") || "0987654321";
 
-      // Mostrar el usuario en todos los lugares
+      // Mostrar usuario y cuenta en todos lados
       document.getElementById("userName").textContent = userName;
+      document.getElementById("userAccount").textContent = userAccount;
       document.getElementById("navbarUserName").textContent = userName;
+      document.getElementById("navbarAccount").textContent = `(${userAccount})`;
+      document.getElementById("welcomeAccount").textContent = userAccount;
       const firstName = userName.split(" ")[0];
       document.getElementById("welcomeUserName").textContent = firstName;
 
-      // Toggle sidebar
-      document
-        .getElementById("sidebarCollapse")
-        .addEventListener("click", function () {
-          document.getElementById("sidebar").classList.toggle("active");
-        });
+      // Validaciones con ValidateJS
+      const montoConstraints = {
+        monto: {
+          numericality: {
+            greaterThan: 0,
+            lessThanOrEqualTo: MONTO_MAXIMO,
+            message: `^El monto debe ser mayor a 0 y no exceder $${MONTO_MAXIMO.toFixed(2)}`
+          }
+        }
+      };
 
-      // Cambiar entre secciones
+      // Función para generar comprobante PDF
+      function generarComprobantePDF(tipo, detalle, monto, nuevoSaldo) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        const fecha = new Date().toLocaleString('es-ES');
+        const usuario = sessionStorage.getItem('pokemonUser') || 'Ash Ketchum';
+        const cuenta = sessionStorage.getItem('pokemonAccount') || '0987654321';
+        
+        doc.setFillColor(42, 117, 187);
+        doc.rect(0, 0, 210, 40, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(18);
+        doc.text('POKÉMON BANK', 105, 15, { align: 'center' });
+        doc.setFontSize(10);
+        doc.text('Comprobante de Transacción', 105, 25, { align: 'center' });
+        
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(11);
+        doc.text(`Fecha: ${fecha}`, 20, 55);
+        doc.text(`Usuario: ${usuario}`, 20, 65);
+        doc.text(`Cuenta: ${cuenta}`, 20, 75);
+        
+        doc.setDrawColor(200, 200, 200);
+        doc.line(20, 85, 190, 85);
+        
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
+        doc.text(`Tipo: ${tipo}`, 20, 100);
+        doc.text(`Detalle: ${detalle}`, 20, 115);
+        doc.text(`Monto: $${monto.toFixed(2)}`, 20, 130);
+        doc.text(`Saldo nuevo: $${nuevoSaldo.toFixed(2)}`, 20, 145);
+        
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(100, 100, 100);
+        doc.text('Este comprobante es válido para fines informativos.', 105, 270, { align: 'center' });
+        
+        doc.save(`Comprobante_${tipo}_${Date.now()}.pdf`);
+        
+        Swal.fire({
+          icon: 'success',
+          title: '📄 Comprobante generado',
+          text: 'El PDF se ha descargado correctamente',
+          timer: 1500,
+          showConfirmButton: false
+        });
+      }
+
+      document.getElementById("sidebarCollapse").addEventListener("click", function () {
+        document.getElementById("sidebar").classList.toggle("active");
+      });
+
       window.showSection = function (section) {
         document.getElementById("dashboardSection").style.display = "none";
         document.getElementById("historialSection").style.display = "none";
@@ -384,13 +453,18 @@
         }
       };
 
-      // Cargar datos guardados
       function cargarDatos() {
         const saldoGuardado = localStorage.getItem("pokemonSaldo");
         const historialGuardado = localStorage.getItem("pokemonHistorial");
 
         if (saldoGuardado) saldo = parseFloat(saldoGuardado);
         if (historialGuardado) historial = JSON.parse(historialGuardado);
+        
+        // Asegurar que la cuenta esté actualizada
+        const cuentaGuardada = localStorage.getItem("pokemonAccount");
+        if (cuentaGuardada && cuentaGuardada !== userAccount) {
+          sessionStorage.setItem("pokemonAccount", cuentaGuardada);
+        }
 
         actualizarSaldoPantalla();
         notificarActualizacion();
@@ -399,6 +473,7 @@
       function guardarDatos() {
         localStorage.setItem("pokemonSaldo", saldo);
         localStorage.setItem("pokemonHistorial", JSON.stringify(historial));
+        localStorage.setItem("pokemonAccount", userAccount);
         notificarActualizacion();
       }
 
@@ -412,23 +487,15 @@
 
         if (historialIframe && historialIframe.contentWindow) {
           historialIframe.contentWindow.postMessage(
-            {
-              type: "actualizar",
-              saldo: saldo,
-              historial: historial,
-            },
-            "*",
+            { type: "actualizar", saldo: saldo, historial: historial },
+            "*"
           );
         }
 
         if (graficosIframe && graficosIframe.contentWindow) {
           graficosIframe.contentWindow.postMessage(
-            {
-              type: "actualizar",
-              saldo: saldo,
-              historial: historial,
-            },
-            "*",
+            { type: "actualizar", saldo: saldo, historial: historial },
+            "*"
           );
         }
       }
@@ -442,66 +509,56 @@
         guardarDatos();
       }
 
-      // Lógica de Depósito
       window.hacerDeposito = function () {
         let inputMonto = document.getElementById("montoDeposito");
         let monto = parseFloat(inputMonto.value);
         let tipo = document.getElementById("tipoDeposito").value;
-        let institucion =
-          document.getElementById("institucionDeposito").value ||
-          "Pokémon Bank";
+        let institucion = document.getElementById("institucionDeposito").value || "Pokémon Bank";
 
-        if (monto > 0) {
-          saldo += monto;
-          registrarMovimiento("Depósito", `${tipo} - ${institucion}`, monto);
-          actualizarSaldoPantalla();
-          inputMonto.value = "";
-          Swal.fire(
-            "¡Depósito Exitoso!",
-            "El dinero ha sido abonado a tu cuenta.",
-            "success",
-          );
-        } else {
-          Swal.fire(
-            "Monto inválido",
-            "Por favor ingresa una cantidad mayor a 0.",
-            "warning",
-          );
+        const errors = validate({ monto: monto }, montoConstraints);
+        
+        if (errors) {
+          Swal.fire("Monto inválido", errors.monto ? errors.monto[0] : `Ingresa un monto entre $0.01 y $${MONTO_MAXIMO.toFixed(2)}`, "warning");
+          return;
         }
+
+        saldo += monto;
+        registrarMovimiento("Depósito", `${tipo} - ${institucion}`, monto);
+        actualizarSaldoPantalla();
+        inputMonto.value = "";
+        
+        generarComprobantePDF("Depósito", `${tipo} - ${institucion}`, monto, saldo);
+        
+        Swal.fire("¡Depósito Exitoso!", `Se han depositado $${monto.toFixed(2)} a tu cuenta.`, "success");
       };
 
-      // Lógica de Retiro
       window.hacerRetiro = function () {
         let inputMonto = document.getElementById("montoRetiro");
         let monto = parseFloat(inputMonto.value);
         let tipo = document.getElementById("tipoRetiro").value;
 
-        if (monto > 0 && monto <= saldo) {
-          saldo -= monto;
-          registrarMovimiento("Retiro", `${tipo} - Retiro en efectivo`, monto);
-          actualizarSaldoPantalla();
-          inputMonto.value = "";
-          Swal.fire(
-            "¡Retiro Exitoso!",
-            "Por favor toma tu efectivo.",
-            "success",
-          );
-        } else if (monto > saldo) {
-          Swal.fire(
-            "Fondos Insuficientes",
-            "No tienes suficiente saldo para este retiro.",
-            "error",
-          );
-        } else {
-          Swal.fire(
-            "Monto inválido",
-            "Por favor ingresa una cantidad mayor a 0.",
-            "warning",
-          );
+        const errorsMonto = validate({ monto: monto }, montoConstraints);
+        
+        if (errorsMonto) {
+          Swal.fire("Monto inválido", errorsMonto.monto ? errorsMonto.monto[0] : `Ingresa un monto entre $0.01 y $${MONTO_MAXIMO.toFixed(2)}`, "warning");
+          return;
         }
+
+        if (monto > saldo) {
+          Swal.fire("Fondos Insuficientes", `No tienes suficiente saldo. Saldo actual: $${saldo.toFixed(2)}`, "error");
+          return;
+        }
+
+        saldo -= monto;
+        registrarMovimiento("Retiro", `${tipo} - Retiro en efectivo`, monto);
+        actualizarSaldoPantalla();
+        inputMonto.value = "";
+        
+        generarComprobantePDF("Retiro", `${tipo} - Retiro en efectivo`, monto, saldo);
+        
+        Swal.fire("¡Retiro Exitoso!", `Has retirado $${monto.toFixed(2)}. Por favor toma tu efectivo.`, "success");
       };
 
-      // Lógica de Pago de Servicios
       window.hacerPago = function () {
         let inputMonto = document.getElementById("montoPago");
         let selectorServicio = document.getElementById("tipoServicio");
@@ -509,37 +566,29 @@
         let monto = parseFloat(inputMonto.value);
         let servicio = selectorServicio.value;
 
-        if (monto > 0 && monto <= saldo) {
-          saldo -= monto;
-          registrarMovimiento(
-            "Pago",
-            `${servicio} - Ref: ${referencia || "N/A"}`,
-            monto,
-          );
-          actualizarSaldoPantalla();
-          inputMonto.value = "";
-          document.getElementById("referenciaPago").value = "";
-          Swal.fire(
-            "¡Pago Exitoso!",
-            `El pago de ${servicio} se realizó correctamente.`,
-            "success",
-          );
-        } else if (monto > saldo) {
-          Swal.fire(
-            "Fondos Insuficientes",
-            "No tienes saldo suficiente para pagar este servicio.",
-            "error",
-          );
-        } else {
-          Swal.fire(
-            "Monto inválido",
-            "Por favor ingresa una cantidad mayor a 0.",
-            "warning",
-          );
+        const errorsMonto = validate({ monto: monto }, montoConstraints);
+        
+        if (errorsMonto) {
+          Swal.fire("Monto inválido", errorsMonto.monto ? errorsMonto.monto[0] : `Ingresa un monto entre $0.01 y $${MONTO_MAXIMO.toFixed(2)}`, "warning");
+          return;
         }
+
+        if (monto > saldo) {
+          Swal.fire("Fondos Insuficientes", `No tienes saldo suficiente. Saldo actual: $${saldo.toFixed(2)}`, "error");
+          return;
+        }
+
+        saldo -= monto;
+        registrarMovimiento("Pago", `${servicio} - Ref: ${referencia || "N/A"}`, monto);
+        actualizarSaldoPantalla();
+        inputMonto.value = "";
+        document.getElementById("referenciaPago").value = "";
+        
+        generarComprobantePDF("Pago de Servicio", `${servicio} - Ref: ${referencia || "N/A"}`, monto, saldo);
+        
+        Swal.fire("¡Pago Exitoso!", `El pago de ${servicio} por $${monto.toFixed(2)} se realizó correctamente.`, "success");
       };
 
-      // Función para cerrar sesión
       function confirmLogout() {
         Swal.fire({
           title: "¿Cerrar sesión?",
@@ -566,22 +615,16 @@
         });
       }
 
-      // Botones de logout
-      document
-        .getElementById("logoutBtn")
-        .addEventListener("click", function (e) {
-          e.preventDefault();
-          confirmLogout();
-        });
+      document.getElementById("logoutBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        confirmLogout();
+      });
 
-      document
-        .getElementById("logoutDropdownBtn")
-        .addEventListener("click", function (e) {
-          e.preventDefault();
-          confirmLogout();
-        });
+      document.getElementById("logoutDropdownBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        confirmLogout();
+      });
 
-      // Inicializar
       cargarDatos();
     </script>
   </body>

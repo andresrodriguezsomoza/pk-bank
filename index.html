@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
+    <!-- ValidateJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+    
     <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/login/styles.css">
 </head>
@@ -38,13 +41,13 @@
                                 <input type="text" 
                                        class="form-control form-control-lg" 
                                        id="username" 
-                                       placeholder="Ingresa tu usuario"
+                                       placeholder="Ingresa usuario"
                                        required>
                             </div>
 
                             <div class="form-group">
                                 <label for="pin" class="pin-label">
-                                    <i class="fas fa-lock mr-2"></i>PIN de 4 dígitos
+                                    <i class="fas fa-lock mr-2"></i>PIN
                                 </label>
                                 <input type="password" 
                                        class="form-control form-control-lg text-center pin-input" 
@@ -54,10 +57,6 @@
                                        inputmode="numeric"
                                        placeholder="****"
                                        required>
-                                <small class="form-text text-muted text-center mt-2">
-                                    <i class="fas fa-info-circle mr-1"></i>
-                                    Usa el PIN: 1234
-                                </small>
                             </div>
 
                             <button type="submit" class="btn btn-pokemon btn-block btn-lg">
@@ -66,7 +65,10 @@
                         </form>
 
                         <div class="text-center mt-4">
-                            <p class="small text-muted mb-0">
+                            <!--<button type="button" id="resetBtn" class="btn btn-link btn-sm text-muted">
+                                <i class="fas fa-sync-alt mr-1"></i>Reiniciar Datos
+                            </button>-->
+                            <p class="small text-muted mb-0 mt-2">
                                 <i class="fas fa-shield-alt mr-1"></i>
                                 Banco Seguro
                             </p>
@@ -78,36 +80,118 @@
     </div>
 
     <script>
+        // Validaciones con ValidateJS
+        const constraints = {
+            username: {
+                presence: { allowEmpty: false, message: '^Por favor ingresa tu usuario' },
+                format: {
+                    pattern: /^Ash Ketchum$/i,
+                    message: '^El usuario debe ser "Ash Ketchum"'
+                }
+            },
+            pin: {
+                presence: { allowEmpty: false, message: '^Ingresa el PIN' },
+                numericality: {
+                    onlyInteger: true,
+                    greaterThanOrEqualTo: 0,
+                    message: '^El PIN debe ser numérico'
+                },
+                length: {
+                    is: 4,
+                    message: '^El PIN debe tener 4 dígitos'
+                }
+            }
+        };
+
+        // Función para reiniciar datos a valores por defecto
+        function reiniciarDatosPorDefecto() {
+            localStorage.setItem('pokemonSaldo', '500.00');
+            localStorage.setItem('pokemonHistorial', JSON.stringify([]));
+            localStorage.setItem('pokemonAccount', '0987654321');
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Datos reiniciados',
+                text: 'Saldo: $500.00 | Cuenta: 0987654321',
+                confirmButtonColor: '#2A75BB'
+            });
+        }
+
+        // Inicializar localStorage con datos por defecto si está vacío o si hay datos viejos
+        function inicializarDatosPorDefecto() {
+            const saldoActual = localStorage.getItem('pokemonSaldo');
+            const cuentaActual = localStorage.getItem('pokemonAccount');
+            
+            // Si no hay datos o la cuenta no es la correcta, reiniciar
+            if (!saldoActual || !cuentaActual || cuentaActual !== '0987654321' || parseFloat(saldoActual) !== 500.00) {
+                reiniciarDatosPorDefecto();
+            }
+        }
+
+        // Botón de reinicio manual
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: '¿Reiniciar datos?',
+                text: 'Esto borrará todo el historial y dejará el saldo en $500.00',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#2A75BB',
+                confirmButtonText: 'Sí, reiniciar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    reiniciarDatosPorDefecto();
+                }
+            });
+        });
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const username = document.getElementById('username').value;
             const pin = document.getElementById('pin').value;
             
-            if (!username.trim()) {
+            // Validar con ValidateJS
+            const errors = validate({ username: username, pin: pin }, constraints);
+            
+            if (errors) {
+                let errorMsg = '';
+                if (errors.username) errorMsg += errors.username[0] + '\n';
+                if (errors.pin) errorMsg += errors.pin[0];
+                
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Campo vacío',
-                    text: 'Por favor ingresa tu usuario',
-                    confirmButtonColor: '#2A75BB',
-                    confirmButtonText: 'OK'
+                    title: 'Error de validación',
+                    text: errorMsg,
+                    confirmButtonColor: '#2A75BB'
                 });
                 return;
             }
             
+            // Validar PIN específico (1234)
             if (pin === '1234') {
-                // Mostrar alerta de éxito
+                // Inicializar datos si es necesario
+                inicializarDatosPorDefecto();
+                
+                const saldoActual = parseFloat(localStorage.getItem('pokemonSaldo')).toFixed(2);
+                const numeroCuenta = localStorage.getItem('pokemonAccount') || '0987654321';
+                
+                // Mostrar nombre y número de cuenta
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Bienvenido!',
-                    text: `Hola ${username}, ingresando al sistema...`,
-                    timer: 1500,
-                    showConfirmButton: false,
-                    background: '#fff',
-                    iconColor: '#2A75BB'
+                    title: '✅ Acceso concedido',
+                    html: `<strong>Nombre:</strong> Ash Ketchum<br>
+                           <strong>Número de cuenta:</strong> ${numeroCuenta}<br>
+                           <strong>Banco:</strong> Pokémon Bank<br>
+                           <strong>Saldo actual:</strong> $${saldoActual}`,
+                    timer: 3000,
+                    showConfirmButton: true,
+                    confirmButtonText: 'Continuar',
+                    confirmButtonColor: '#2A75BB'
                 }).then(() => {
-                    // Guardar el usuario en sessionStorage
-                    sessionStorage.setItem('pokemonUser', username);
+                    sessionStorage.setItem('pokemonUser', 'Ash Ketchum');
+                    sessionStorage.setItem('pokemonAccount', numeroCuenta);
                     window.location.href = 'dashboard.html';
                 });
             } else {
@@ -115,8 +199,7 @@
                     icon: 'error',
                     title: 'PIN incorrecto',
                     text: 'El PIN debe ser 1234',
-                    confirmButtonColor: '#FF0000',
-                    confirmButtonText: 'Intentar de nuevo'
+                    confirmButtonColor: '#d33'
                 });
             }
         });

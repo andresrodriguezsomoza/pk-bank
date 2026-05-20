@@ -23,7 +23,6 @@
   </head>
   <body>
     <div class="wrapper">
-      <!-- Sidebar -->
       <nav id="sidebar" class="active">
         <div class="sidebar-header">
           <img src="img/pokeball.png" alt="Pokeball" class="sidebar-logo" />
@@ -62,43 +61,27 @@
             <i class="fas fa-user-circle"></i>
             <div>
               <p class="mb-0 font-weight-bold" id="userName">Ash Ketchum</p>
-              <small>#1234-5678-9012</small>
+              <small id="userAccount">0987654321</small>
             </div>
           </div>
         </div>
       </nav>
 
-      <!-- Page Content -->
       <div id="content">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <div class="container-fluid">
-            <button
-              type="button"
-              id="sidebarCollapse"
-              class="btn btn-pokemon-menu"
-            >
+            <button type="button" id="sidebarCollapse" class="btn btn-pokemon-menu">
               <i class="fas fa-bars"></i>
             </button>
-
             <div class="navbar-right ml-auto">
               <div class="dropdown">
-                <button
-                  class="btn btn-light dropdown-toggle"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                >
-                  <i class="fas fa-user mr-2"></i
-                  ><span id="navbarUserName">Ash Ketchum</span>
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                  <i class="fas fa-user mr-2"></i><span id="navbarUserName">Ash Ketchum</span>
+                  <small class="text-muted ml-2" id="navbarAccount">(0987654321)</small>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                   <div class="dropdown-divider"></div>
-                  <a
-                    class="dropdown-item text-danger"
-                    href="#"
-                    id="logoutDropdownBtn"
-                    ><i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión</a
-                  >
+                  <a class="dropdown-item text-danger" href="#" id="logoutDropdownBtn"><i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión</a>
                 </div>
               </div>
             </div>
@@ -107,13 +90,10 @@
 
         <div class="main-content">
           <div class="graficos-container">
-            <!-- Tarjetas de totales -->
             <div class="row mb-4">
               <div class="col-md-4">
                 <div class="stats-card stats-card-depositos">
-                  <small
-                    ><i class="fas fa-chart-line"></i> Total Depósitos</small
-                  >
+                  <small><i class="fas fa-chart-line"></i> Total Depósitos</small>
                   <h3 id="totalDepositos">$0.00</h3>
                 </div>
               </div>
@@ -125,26 +105,19 @@
               </div>
               <div class="col-md-4">
                 <div class="stats-card stats-card-pagos">
-                  <small
-                    ><i class="fas fa-file-invoice-dollar"></i> Total
-                    Pagos</small
-                  >
+                  <small><i class="fas fa-file-invoice-dollar"></i> Total Pagos</small>
                   <h3 id="totalPagos">$0.00</h3>
                 </div>
               </div>
             </div>
 
-            <!-- Gráfico de barras -->
             <div class="row">
               <div class="col-12">
-                <h5 class="text-center mb-3">
-                  <i class="fas fa-chart-bar mr-2"></i>Resumen de Movimientos
-                </h5>
+                <h5 class="text-center mb-3"><i class="fas fa-chart-bar mr-2"></i>Resumen de Movimientos - Cuenta: <span id="headerAccount">0987654321</span></h5>
                 <canvas id="graficoMovimientos"></canvas>
               </div>
             </div>
 
-            <!-- Saldo y total transacciones -->
             <div class="row mt-4">
               <div class="col-md-6">
                 <div class="stats-card stats-card-saldo">
@@ -154,9 +127,7 @@
               </div>
               <div class="col-md-6">
                 <div class="stats-card stats-card-transacciones">
-                  <small
-                    ><i class="fas fa-chart-pie"></i> Total Transacciones</small
-                  >
+                  <small><i class="fas fa-chart-pie"></i> Total Transacciones</small>
                   <h3 id="totalTransacciones">0</h3>
                 </div>
               </div>
@@ -174,128 +145,78 @@
       let grafico;
       let saldo = 0;
 
-      // Usuario
       const userName = sessionStorage.getItem("pokemonUser") || "Ash Ketchum";
+      const userAccount = sessionStorage.getItem("pokemonAccount") || "0987654321";
+      
       document.getElementById("userName").textContent = userName;
+      document.getElementById("userAccount").textContent = userAccount;
       document.getElementById("navbarUserName").textContent = userName;
+      document.getElementById("navbarAccount").textContent = `(${userAccount})`;
+      document.getElementById("headerAccount").textContent = userAccount;
 
       const pokemonUser = sessionStorage.getItem("pokemonUser");
       if (!pokemonUser) {
-        // Si no hay sesión, redirigir al login
         window.location.href = "index.html";
       }
 
       function calcularTotales(historial) {
-        let totalDepositos = 0;
-        let totalRetiros = 0;
-        let totalPagos = 0;
-
+        let totalDepositos = 0, totalRetiros = 0, totalPagos = 0;
         historial.forEach((mov) => {
-          if (mov.tipo === "Depósito") {
-            totalDepositos += mov.monto;
-          } else if (mov.tipo === "Retiro") {
-            totalRetiros += mov.monto;
-          } else if (mov.tipo === "Pago") {
-            totalPagos += mov.monto;
-          }
+          if (mov.tipo === "Depósito") totalDepositos += mov.monto;
+          else if (mov.tipo === "Retiro") totalRetiros += mov.monto;
+          else if (mov.tipo === "Pago") totalPagos += mov.monto;
         });
-
         return { totalDepositos, totalRetiros, totalPagos };
       }
 
       function actualizarTodo() {
-        const historial =
-          JSON.parse(localStorage.getItem("pokemonHistorial")) || [];
-        saldo = parseFloat(localStorage.getItem("pokemonSaldo")) || 5678.9;
+        const historial = JSON.parse(localStorage.getItem("pokemonHistorial")) || [];
+        saldo = parseFloat(localStorage.getItem("pokemonSaldo")) || 500.00;
 
-        const { totalDepositos, totalRetiros, totalPagos } =
-          calcularTotales(historial);
+        const { totalDepositos, totalRetiros, totalPagos } = calcularTotales(historial);
 
-        // Actualizar tarjetas de totales
-        document.getElementById("totalDepositos").innerText =
-          "$" + totalDepositos.toFixed(2);
-        document.getElementById("totalRetiros").innerText =
-          "$" + totalRetiros.toFixed(2);
-        document.getElementById("totalPagos").innerText =
-          "$" + totalPagos.toFixed(2);
-        document.getElementById("saldoActual").innerText =
-          "$" + saldo.toFixed(2);
-        document.getElementById("totalTransacciones").innerText =
-          historial.length;
+        document.getElementById("totalDepositos").innerText = "$" + totalDepositos.toFixed(2);
+        document.getElementById("totalRetiros").innerText = "$" + totalRetiros.toFixed(2);
+        document.getElementById("totalPagos").innerText = "$" + totalPagos.toFixed(2);
+        document.getElementById("saldoActual").innerText = "$" + saldo.toFixed(2);
+        document.getElementById("totalTransacciones").innerText = historial.length;
 
-        // Actualizar gráfico
         if (grafico) {
-          grafico.data.datasets[0].data = [
-            totalDepositos,
-            totalRetiros,
-            totalPagos,
-          ];
+          grafico.data.datasets[0].data = [totalDepositos, totalRetiros, totalPagos];
           grafico.update();
         }
       }
 
       function initGrafico() {
-        const ctx = document
-          .getElementById("graficoMovimientos")
-          .getContext("2d");
-
+        const ctx = document.getElementById("graficoMovimientos").getContext("2d");
         grafico = new Chart(ctx, {
           type: "bar",
           data: {
             labels: ["Depósitos", "Retiros", "Pagos"],
-            datasets: [
-              {
-                label: "Movimientos ($)",
-                data: [0, 0, 0],
-                backgroundColor: [
-                  "rgba(40, 167, 69, 0.8)",
-                  "rgba(220, 53, 69, 0.8)",
-                  "rgba(0, 123, 255, 0.8)",
-                ],
-                borderColor: [
-                  "rgba(40, 167, 69, 1)",
-                  "rgba(220, 53, 69, 1)",
-                  "rgba(0, 123, 255, 1)",
-                ],
-                borderWidth: 2,
-              },
-            ],
+            datasets: [{
+              label: "Movimientos ($)",
+              data: [0, 0, 0],
+              backgroundColor: ["rgba(40, 167, 69, 0.8)", "rgba(220, 53, 69, 0.8)", "rgba(0, 123, 255, 0.8)"],
+              borderColor: ["rgba(40, 167, 69, 1)", "rgba(220, 53, 69, 1)", "rgba(0, 123, 255, 1)"],
+              borderWidth: 2,
+            }],
           },
           options: {
             responsive: true,
             maintainAspectRatio: true,
             plugins: {
               legend: { position: "top" },
-              tooltip: {
-                callbacks: {
-                  label: function (context) {
-                    return "$" + context.raw.toFixed(2);
-                  },
-                },
-              },
+              tooltip: { callbacks: { label: (context) => "$" + context.raw.toFixed(2) } },
             },
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  callback: function (value) {
-                    return "$" + value;
-                  },
-                },
-              },
-            },
+            scales: { y: { beginAtZero: true, ticks: { callback: (value) => "$" + value } } },
           },
         });
       }
 
-      // Sidebar toggle
-      document
-        .getElementById("sidebarCollapse")
-        .addEventListener("click", function () {
-          document.getElementById("sidebar").classList.toggle("active");
-        });
+      document.getElementById("sidebarCollapse").addEventListener("click", function () {
+        document.getElementById("sidebar").classList.toggle("active");
+      });
 
-      // Logout
       function confirmLogout() {
         Swal.fire({
           title: "¿Cerrar sesión?",
@@ -309,32 +230,17 @@
         }).then((result) => {
           if (result.isConfirmed) {
             sessionStorage.clear();
-            Swal.fire({
-              icon: "success",
-              title: "¡Hasta pronto!",
-              timer: 1500,
-              showConfirmButton: false,
-            }).then(() => (window.location.href = "index.html"));
+            Swal.fire({ icon: "success", title: "¡Hasta pronto!", timer: 1500, showConfirmButton: false }).then(() => (window.location.href = "index.html"));
           }
         });
       }
 
-      document.getElementById("logoutBtn").addEventListener("click", (e) => {
-        e.preventDefault();
-        confirmLogout();
-      });
-      document
-        .getElementById("logoutDropdownBtn")
-        .addEventListener("click", (e) => {
-          e.preventDefault();
-          confirmLogout();
-        });
+      document.getElementById("logoutBtn").addEventListener("click", (e) => { e.preventDefault(); confirmLogout(); });
+      document.getElementById("logoutDropdownBtn").addEventListener("click", (e) => { e.preventDefault(); confirmLogout(); });
 
-      // Inicializar
       initGrafico();
       actualizarTodo();
 
-      // Escuchar cambios en localStorage
       window.addEventListener("storage", function (e) {
         if (e.key === "pokemonHistorial" || e.key === "pokemonSaldo") {
           actualizarTodo();
